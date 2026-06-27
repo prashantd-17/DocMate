@@ -1,0 +1,193 @@
+{
+  "app_name": "DocMate",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "A confident, offline-first productivity toolkit that feels as refined and purposeful as native iOS apps—no clutter, just absolute clarity.",
+  "color": {
+    "surface": "#FFFFFF",
+    "onSurface": "#121212",
+    "surfaceSecondary": "#F4F4F5",
+    "onSurfaceSecondary": "#525252",
+    "surfaceTertiary": "#E5E5E5",
+    "onSurfaceTertiary": "#737373",
+    "surfaceInverse": "#1C1C1E",
+    "onSurfaceInverse": "#FFFFFF",
+    "brand": "#4A5D4E",
+    "brandPrimary": "#4A5D4E",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#E8EBE9",
+    "onBrandSecondary": "#313F34",
+    "brandTertiary": "#F2F4F2",
+    "onBrandTertiary": "#4A5D4E",
+    "success": "#347A52",
+    "onSuccess": "#FFFFFF",
+    "warning": "#B57B22",
+    "onWarning": "#FFFFFF",
+    "error": "#B33A3A",
+    "onError": "#FFFFFF",
+    "info": "#4A5D4E",
+    "onInfo": "#FFFFFF",
+    "border": "#E5E5E5",
+    "borderStrong": "#A3A3A3",
+    "divider": "#F0F0F0"
+  },
+  "typography": {
+    "displayFontFamily": "Geist",
+    "textFontFamily": "Geist",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous vertical breathing room. Use 24pt (xl) outer screen padding. Components should feel distinctly grouped with clear whitespace, never cramped.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "bottom_tabs",
+  "icon_set": "Lucide",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Use glass on the bottom tab bar",
+      "Use glass on sticky headers over scrolling content",
+      "Use glass overlay on the Hero/Tips card on the Home and Government screens",
+      "Use a glass/frosted container for the floating primary CTA or FAB"
+    ],
+    "dont's": [
+      "Do not use glass on regular list rows",
+      "Do not use glass on dense data forms",
+      "Do not apply blur without a tinted background layer to ensure readability"
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Home",
+      "purpose": "The command center for document prep—fast access to scanning, quick tools, and recent files.",
+      "states": {
+        "loading": "Centered spinner with a subtle 'Preparing workspace...' text.",
+        "empty": "Empty state for Recent Files: minimal illustration (minimalist desk photo placeholder) with 'No recent documents' and a CTA to 'Scan Document'.",
+        "error": "Card showing 'Unable to load recent files' with a Retry button."
+      },
+      "layout": "1. Safe area top header with 'DocMate' wordmark (Geist 500) and Settings icon.\n2. Search Bar: full-width minus padding, surfaceSecondary bg.\n3. Tips/Hero Card: Top section featuring an abstract minimal paper background (use provided URL), dark gradient scrim, and 'Prepare your Aadhaar & PAN perfectly' text with a primary CTA.\n4. Quick Actions: Horizontal scroll (flex-direction: row, gap: md) of square cards (Scanner, Compress, Sign) with brandTertiary tinted icon containers.\n5. Government Services Grid: 2-column flexWrap grid (space-between) for fast preset access.\n6. Recent Files: Vertical list of standard list items.\n7. Ad Banner Placeholder: Fixed container at bottom, surfaceSecondary bg, 1pt border, text 'Ad Placement'."
+    },
+    {
+      "name": "Tools",
+      "purpose": "Comprehensive index of all available toolkit utilities grouped by category.",
+      "states": {
+        "loading": "Skeleton rows mirroring the list layout.",
+        "empty": "N/A - static list.",
+        "error": "N/A - static list."
+      },
+      "layout": "Vertical scrollview. Sections: 'Image Tools', 'PDF Tools', 'Signature'. Section headers use Geist 500 at xl size. List rows: leading icon inside a brandTertiary rounded square, title, subtitle, trailing chevron. Ad banner placeholder at the very bottom."
+    },
+    {
+      "name": "Government",
+      "purpose": "Specific workflows tailored to exact government document constraints.",
+      "states": {
+        "loading": "Skeleton cards.",
+        "empty": "N/A - static list.",
+        "error": "N/A - static list."
+      },
+      "layout": "Hero banner at top using minimalist desk photo (with gradient scrim). Below it, a vertical list of large cards (Passport, PAN, DL, Scholarships). Each card shows the exact constraints (e.g., 'Max 200KB • JPEG'). Tapping a card opens a Bottom Sheet containing the specific requirements and a full-width sticky 'Prepare Document' CTA."
+    },
+    {
+      "name": "History",
+      "purpose": "Central repository for all processed documents, entirely offline.",
+      "states": {
+        "loading": "Spinner.",
+        "empty": "Full-screen flex: 1 empty state. Minimalist paper illustration, 'Your history is empty', and a 'Scan First Document' primary CTA.",
+        "error": "Text 'Could not load storage' + Retry CTA."
+      },
+      "layout": "Sticky glass header with Search and Filter/Sort icons. Vertical FlatList of document cards. Each card: thumbnail on left (surfaceTertiary fallback), Title, Date, Size, Type badge (brandTertiary), and a 3-dot vertical menu icon. Bottom ad banner placeholder."
+    },
+    {
+      "name": "Settings",
+      "purpose": "App preferences, offline storage management, and information.",
+      "states": {
+        "loading": "N/A.",
+        "empty": "N/A.",
+        "error": "N/A."
+      },
+      "layout": "Standard iOS-style grouped list rows. Sections: 'Preferences' (Dark mode toggle, Language), 'Storage' (Local space used + 'Clear All' button), 'About'. Ad banner placeholder at bottom."
+    },
+    {
+      "name": "SmartScannerOverlay",
+      "purpose": "Camera overlay for document edge detection and capture.",
+      "states": {
+        "loading": "Camera initializing spinner.",
+        "empty": "N/A.",
+        "error": "Camera permission denied message + 'Open Settings' CTA."
+      },
+      "layout": "Full-screen camera view. Top safe area: back button, flash toggle, auto-scan toggle. Overlay: green (success) or brand-colored borders tracking document edges. Bottom safe area: solid black or highly tinted glass background, large primary capture button (pill shape, brandPrimary), gallery picker icon on left."
+    },
+    {
+      "name": "ToolDetail_Compressor",
+      "purpose": "Focus screen for adjusting image size precisely.",
+      "states": {
+        "loading": "Processing image spinner overlay.",
+        "empty": "N/A.",
+        "error": "Toast: 'Image too small to compress further'."
+      },
+      "layout": "Header: Title 'Compress Image'. Content: Image preview container (centered, surfaceSecondary bg). Below: segmented control or wrapping chip group for presets (10KB, 50KB, 100KB, 500KB, Custom). Text showing 'Estimated Size: ~45KB'. Sticky primary CTA at bottom 'Compress & Save'."
+    }
+  ],
+  "images": {
+    "hero_abstract_paper": {
+      "url": "https://images.unsplash.com/photo-1636306950045-4dbb10b7e0f4",
+      "alt": "Clean abstract minimal paper rolls in soft cream tones"
+    },
+    "hero_minimal_desk": {
+      "url": "https://images.pexels.com/photos/5793964/pexels-photo-5793964.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Top view of a minimalist workspace with laptop and paper on a white table"
+    },
+    "empty_state_desk": {
+      "url": "https://images.pexels.com/photos/7794004/pexels-photo-7794004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Minimalist desk layout with paper and stationery"
+    }
+  },
+  "haptics": {
+    "button_press": "light",
+    "tab_change": "light",
+    "toggle_switch": "light",
+    "camera_capture": "medium",
+    "action_success": "success",
+    "action_error": "error",
+    "bottom_sheet_open": "light"
+  },
+  "instructions_to_main_agent": [
+    "IMPLEMENTATION RULE: Ensure completely offline functionality. Do not implement any API calls or backend syncs. Use AsyncStorage or SQLite for history.",
+    "STYLING: Strictly follow the 1 iOS-Native Clean personality. Do not use any blue, indigo, or purple hues. Stick to the Sage Green (brand) and grayscale palette.",
+    "LAYOUT: Use the defined Safe Areas meticulously. Ensure all screens have a 24pt (xl) outer padding unless they are full-bleed images.",
+    "CTA PATTERN: Every tool workflow (Compressor, Scanner, Signature) must feature a sticky primary CTA at the bottom of the screen, anchored above the home indicator, unaffected by scroll.",
+    "IMAGE HANDLING: Any time an image from the 'images' block is used as a background or hero banner, you MUST overlay a vertical linear-gradient scrim (transparent at top, 70%+ surfaceInverse at bottom) and place the text in the bottom 30% to guarantee WCAG contrast.",
+    "AD BANNERS: Create a distinct component called `AdBannerPlaceholder` that matches the exact visual description (surfaceSecondary, 1pt border, text centered) and place it at the bottom of Home, History, and Settings as requested.",
+    "NAVIGATION: Implement a 5-tab bottom navigation using expo-router or react-navigation. Ensure inactive tabs are outlined Lucide icons, and the active tab is a filled/highlighted Lucide icon (or use stroke width emphasis if filled is unavailable)."
+  ]
+}
