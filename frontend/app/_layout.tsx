@@ -9,6 +9,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useIconFonts } from '@/src/hooks/use-icon-fonts';
 import { useTheme } from '@/src/theme/useTheme';
 import { StoreProvider } from '@/src/store/useAppStore';
+import { ToastProvider } from '@/src/components/Toast';
 
 LogBox.ignoreAllLogs(true);
 
@@ -39,23 +40,25 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <StoreProvider>
-          <ThemedShell>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                animation: 'slide_from_right',
-                contentStyle: { backgroundColor: 'transparent' },
-              }}
-            >
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="scanner" options={{ presentation: 'card' }} />
-              <Stack.Screen name="compressor" options={{ presentation: 'card' }} />
-              <Stack.Screen name="signature" options={{ presentation: 'card' }} />
-              <Stack.Screen name="photo-resizer" options={{ presentation: 'card' }} />
-              <Stack.Screen name="pdf-tools" options={{ presentation: 'card' }} />
-              <Stack.Screen name="preset/[id]" options={{ presentation: 'card' }} />
-            </Stack>
-          </ThemedShell>
+          <ToastProvider>
+            <ThemedShell>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  animation: 'slide_from_right',
+                  contentStyle: { backgroundColor: 'transparent' },
+                }}
+              >
+                <Stack.Screen name="(tabs)" />
+                <Stack.Screen name="scanner" options={{ presentation: 'card' }} />
+                <Stack.Screen name="compressor" options={{ presentation: 'card' }} />
+                <Stack.Screen name="signature" options={{ presentation: 'card' }} />
+                <Stack.Screen name="photo-resizer" options={{ presentation: 'card' }} />
+                <Stack.Screen name="pdf-tools" options={{ presentation: 'card' }} />
+                <Stack.Screen name="preset/[id]" options={{ presentation: 'card' }} />
+              </Stack>
+            </ThemedShell>
+          </ToastProvider>
         </StoreProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

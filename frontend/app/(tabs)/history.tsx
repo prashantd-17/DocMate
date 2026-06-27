@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import * as Sharing from 'expo-sharing';
-import { Clock, FileText, ArrowDownAZ, ArrowUpAZ } from 'lucide-react-native';
+import { Clock, ArrowDownAZ, ArrowUpAZ } from 'lucide-react-native';
 
 import { useTheme } from '@/src/theme/useTheme';
 import { spacing, radius, typography } from '@/src/theme';
@@ -12,6 +11,7 @@ import Chip from '@/src/components/Chip';
 import FileCard from '@/src/components/FileCard';
 import EmptyState from '@/src/components/EmptyState';
 import AdBannerPlaceholder from '@/src/components/AdBannerPlaceholder';
+import FileActionSheet from '@/src/components/FileActionSheet';
 import { useAppStore } from '@/src/store/useAppStore';
 import { DocFile } from '@/src/types';
 
@@ -27,12 +27,12 @@ export default function HistoryScreen() {
   const { colors } = useTheme();
   const router = useRouter();
   const files = useAppStore((s) => s.files);
-  const deleteFile = useAppStore((s) => s.deleteFile);
   const toggleFav = useAppStore((s) => s.toggleFavoriteFile);
 
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<typeof FILTERS[number]['id']>('all');
   const [sortDesc, setSortDesc] = useState(true);
+  const [activeFile, setActiveFile] = useState<DocFile | null>(null);
 
   const list = useMemo(() => {
     let r = files;
@@ -43,12 +43,6 @@ export default function HistoryScreen() {
     r = [...r].sort((a, b) => (sortDesc ? b.createdAt - a.createdAt : a.createdAt - b.createdAt));
     return r;
   }, [files, query, filter, sortDesc]);
-
-  const onShare = async (f: DocFile) => {
-    try {
-      await Sharing.shareAsync(f.uri);
-    } catch {}
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }} testID="history-screen">
@@ -109,9 +103,9 @@ export default function HistoryScreen() {
             <FileCard
               key={f.id}
               file={f}
-              onPress={() => onShare(f)}
+              onPress={() => setActiveFile(f)}
               onFavoriteToggle={() => toggleFav(f.id)}
-              onMenu={() => deleteFile(f.id)}
+              onMenu={() => setActiveFile(f)}
             />
           ))
         )}

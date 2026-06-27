@@ -11,6 +11,7 @@ import { useTheme } from '@/src/theme/useTheme';
 import { spacing, radius, typography } from '@/src/theme';
 import PrimaryButton from '@/src/components/PrimaryButton';
 import Chip from '@/src/components/Chip';
+import { useToast } from '@/src/components/Toast';
 import { useAppStore } from '@/src/store/useAppStore';
 import { uid } from '@/src/utils/format';
 import { applyFilter, rotateImage, copyToDocuments, fileSize } from '@/src/utils/image';
@@ -23,6 +24,7 @@ export default function ScannerScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const addFile = useAppStore((s) => s.addFile);
+  const toast = useToast();
 
   const [pages, setPages] = useState<{ uri: string; w: number; h: number }[]>([]);
   const [filter, setFilter] = useState<Filter>('original');
@@ -32,7 +34,7 @@ export default function ScannerScreen() {
     const perm = await ImagePicker.requestCameraPermissionsAsync();
     if (!perm.granted) return;
     const r = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 0.92,
     });
@@ -46,7 +48,7 @@ export default function ScannerScreen() {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) return;
     const r = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 0.92,
     });
@@ -83,6 +85,7 @@ export default function ScannerScreen() {
         createdAt: Date.now(),
         meta: { pages: pages.length },
       });
+      toast.show('PDF saved to history');
       router.push('/(tabs)/history');
     } finally {
       setBusy(false);
@@ -107,6 +110,7 @@ export default function ScannerScreen() {
           createdAt: Date.now(),
         });
       }
+      toast.show(`${pages.length} page${pages.length === 1 ? '' : 's'} saved`);
       router.push('/(tabs)/history');
     } finally {
       setBusy(false);

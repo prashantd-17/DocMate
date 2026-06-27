@@ -9,6 +9,8 @@ import { ArrowLeft, CheckCircle2, ImagePlus, Sparkles } from 'lucide-react-nativ
 import { useTheme } from '@/src/theme/useTheme';
 import { spacing, radius, typography } from '@/src/theme';
 import PrimaryButton from '@/src/components/PrimaryButton';
+import ResultActionsRow from '@/src/components/ResultActionsRow';
+import { useToast } from '@/src/components/Toast';
 import { useAppStore } from '@/src/store/useAppStore';
 import { uid, formatBytes } from '@/src/utils/format';
 import { resizeToDimensions, compressToTarget, copyToDocuments } from '@/src/utils/image';
@@ -21,6 +23,7 @@ export default function PresetDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const preset = getPresetById(id ?? '');
   const addFile = useAppStore((s) => s.addFile);
+  const toast = useToast();
 
   const [uri, setUri] = useState<string | null>(null);
   const [result, setResult] = useState<{ uri: string; size: number; w: number; h: number } | null>(null);
@@ -38,7 +41,7 @@ export default function PresetDetailScreen() {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) return;
     const r = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: preset.dimensionsPx ? [preset.dimensionsPx.width, preset.dimensionsPx.height] : undefined,
       quality: 1,
@@ -79,6 +82,7 @@ export default function PresetDetailScreen() {
       createdAt: Date.now(),
       meta: { width: result.w, height: result.h, presetId: preset.id },
     });
+    toast.show('Document saved');
     router.push('/(tabs)/history');
   };
 
@@ -140,6 +144,8 @@ export default function PresetDetailScreen() {
             </View>
           </View>
         )}
+
+        {result && <ResultActionsRow uri={result.uri} fileType="jpg" />}
       </ScrollView>
 
       <View

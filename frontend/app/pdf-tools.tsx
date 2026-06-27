@@ -9,6 +9,7 @@ import { ArrowLeft, ImagePlus, Trash2, FilePlus2 } from 'lucide-react-native';
 import { useTheme } from '@/src/theme/useTheme';
 import { spacing, radius, typography } from '@/src/theme';
 import PrimaryButton from '@/src/components/PrimaryButton';
+import { useToast } from '@/src/components/Toast';
 import { useAppStore } from '@/src/store/useAppStore';
 import { uid } from '@/src/utils/format';
 import { imagesToPdf } from '@/src/utils/pdf';
@@ -19,6 +20,7 @@ export default function PdfToolsScreen() {
   const router = useRouter();
   const { mode } = useLocalSearchParams<{ mode?: string }>();
   const addFile = useAppStore((s) => s.addFile);
+  const toast = useToast();
 
   const [images, setImages] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
@@ -38,7 +40,7 @@ export default function PdfToolsScreen() {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) return;
     const r = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsMultipleSelection: true,
       quality: 0.92,
     });
@@ -73,6 +75,7 @@ export default function PdfToolsScreen() {
         createdAt: Date.now(),
         meta: { pages: images.length },
       });
+      toast.show('PDF saved to history');
       router.push('/(tabs)/history');
     } finally {
       setBusy(false);

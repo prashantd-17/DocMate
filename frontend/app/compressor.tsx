@@ -10,6 +10,8 @@ import { useTheme } from '@/src/theme/useTheme';
 import { spacing, radius, typography } from '@/src/theme';
 import PrimaryButton from '@/src/components/PrimaryButton';
 import Chip from '@/src/components/Chip';
+import ResultActionsRow from '@/src/components/ResultActionsRow';
+import { useToast } from '@/src/components/Toast';
 import { useAppStore } from '@/src/store/useAppStore';
 import { uid, formatBytes } from '@/src/utils/format';
 import { compressToTarget, fileSize, copyToDocuments } from '@/src/utils/image';
@@ -21,6 +23,7 @@ export default function CompressorScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const addFile = useAppStore((s) => s.addFile);
+  const toast = useToast();
 
   const [uri, setUri] = useState<string | null>(null);
   const [origSize, setOrigSize] = useState(0);
@@ -33,7 +36,7 @@ export default function CompressorScreen() {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted) return;
     const r = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       quality: 1,
     });
     if (!r.canceled) {
@@ -69,6 +72,7 @@ export default function CompressorScreen() {
       createdAt: Date.now(),
       meta: { width: result.w, height: result.h },
     });
+    toast.show('Saved to history');
     router.push('/(tabs)/history');
   };
 
@@ -135,6 +139,8 @@ export default function CompressorScreen() {
             />
           ))}
         </ScrollView>
+
+        {result && <ResultActionsRow uri={result.uri} fileType="jpg" />}
       </ScrollView>
 
       <View
